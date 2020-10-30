@@ -1,7 +1,9 @@
 package services
 
 import data.ExitCodes
+import data.RoleResource
 import data.User
+import db.tableRolesResources
 import db.tableUsers
 
 class DatabaseWrapper {
@@ -17,4 +19,21 @@ class DatabaseWrapper {
         return User(id, login, hashPassword, salt)
     }
 
+    private fun checkAccess(roleResource: RoleResource): Boolean {
+        val response = tableRolesResources.filter {
+            it["role"] == roleResource.role && it.getValue("idUser").toInt() == roleResource.idUser
+                    && checkResourceAccess(roleResource.resource, it.getValue("resource"))
+        }
+        if (response.isEmpty())
+            return false
+        return true
+    }
+
+    private fun checkResourceAccess(resource: String, realResource: String): Boolean {
+        val resourcesSequence = resource.split(".").toSet()
+        val realResourcesSequence = realResource.split(".").toSet()
+        if (resourcesSequence.intersect(realResourcesSequence).isEmpty())
+            return false
+        return true
+    }
 }
