@@ -1,8 +1,10 @@
 package services
 
+import data.Activity
 import data.ExitCodes
 import data.RoleResource
 import data.User
+import db.tableActivity
 import db.tableRolesResources
 import db.tableUsers
 
@@ -35,5 +37,9 @@ class DatabaseWrapper {
         if (resourcesSequence.intersect(realResourcesSequence).isEmpty())
             return false
         return true
+    }
+
+    fun addActivity(activity: Activity) {
+        tableActivity.add(activity.toMap())
     }
 }
