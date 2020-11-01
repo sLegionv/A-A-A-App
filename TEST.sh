@@ -36,5 +36,11 @@ do
       echo "Test $i failed: received - $exitCode expected - $expectedExitCode."
   fi
 done
-echo $amountPassedTests
+echo "Result: $amountPassedTests passed tests"
+if [ "$amountPassedTests" == "$amountTests" ]
+  then
+    return 0
+  else
+    return 1
+fi
 exec $SHELL
