@@ -27,11 +27,10 @@ class DatabaseWrapper {
     }
 
     private fun checkResourceAccess(resource: String, realResource: String): Boolean {
-        val resourcesSequence = resource.split(".").toSet()
-        val realResourcesSequence = realResource.split(".").toSet()
-        if (resourcesSequence.intersect(realResourcesSequence).isEmpty())
-            return false
-        return true
+        val realResourceLast = realResource.substringAfterLast('.')
+        if (realResourceLast in resource.split("."))
+            return true
+        return false
     }
 
     fun addActivity(activity: Activity) {
