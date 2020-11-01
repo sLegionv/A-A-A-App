@@ -1,5 +1,6 @@
 #!/bin/bash
 amountTests=19
+amountPassedTests=0
 declare -A tests
 tests[0]="app.jar"
 tests[1]="app.jar -h"
@@ -30,8 +31,10 @@ do
   if [ "$exitCode" == "$expectedExitCode" ]
    then
       echo "Test $i passed: exit code - $?."
+      let amountPassedTests++
     else
       echo "Test $i failed: received - $exitCode expected - $expectedExitCode."
   fi
 done
+echo $amountPassedTests
 exec $SHELL
