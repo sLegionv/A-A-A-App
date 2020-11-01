@@ -1,23 +1,18 @@
 package services
 
-import data.Activity
-import data.ExitCodes
-import data.RoleResource
-import data.User
-import db.tableActivity
-import db.tableRolesResources
-import db.tableUsers
+import data.*
+import db.*
 
 class DatabaseWrapper {
 
     fun getUser(login: String): User {
-        val user = tableUsers.find { it["login"] == login }
-        if (user == null) {
+        val response = tableUsers.find { it["login"] == login }
+        if (response == null) {
             terminate(exitCode = ExitCodes.UnknownLogin.exitCode, printHelp = false)
         }
-        val id: Int = user!!.getValue("id").toInt()
-        val hashPassword: String = user.getValue("hashPassword")
-        val salt: String = user.getValue("salt")
+        val id: Int = response!!.getValue("id").toInt()
+        val hashPassword: String = response.getValue("hashPassword")
+        val salt: String = response.getValue("salt")
         return User(id, login, hashPassword, salt)
     }
 

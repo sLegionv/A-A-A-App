@@ -1,10 +1,11 @@
 package services
+import data.Arguments
 
 class HandlerCLI() {
-    private val commands = arrayOf("-login", "-pass", "-res", "-role", "-ds", "-de", "-vol")
+    private val commands = arrayOf("-h", "-login", "-pass", "-res", "-role", "-ds", "-de", "-vol")
 
-    fun run(args: Array<String>): MutableMap<String, String?> {
-        val commandsArgs: MutableMap<String, String?> = commands.map { it to null }.toMap().toMutableMap()
+    fun run(args: Array<String>): Arguments {
+        val arguments = Arguments()
         val sizeArgs = args.size
         when {
             args.isEmpty() -> terminate()
@@ -19,5 +20,9 @@ class HandlerCLI() {
             commandsArgs[arg] = args[i + 1]
         }
         return commandsArgs
+    }
+
+    fun checkAmountParams(x: Any): Boolean {
+        
     }
 }
