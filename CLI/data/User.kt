@@ -3,6 +3,6 @@ package data
 data class User(
     val id: Int,
     val login: String,
-    val hashPassword: String,
+    val Password: String,
     val salt: String
 )
