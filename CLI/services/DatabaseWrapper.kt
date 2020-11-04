@@ -1,7 +1,12 @@
 package services
 
-import data.*
-import db.*
+import data.Activity
+import data.ExitCodes
+import data.RoleResource
+import data.User
+import db.tableActivity
+import db.tableRolesResources
+import db.tableUsers
 
 class DatabaseWrapper {
 
