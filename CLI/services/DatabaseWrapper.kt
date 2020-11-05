@@ -13,7 +13,7 @@ class DatabaseWrapper {
     fun getUser(login: String): User {
         val response = tableUsers.find { it["login"] == login }
         if (response == null) {
-            terminate(exitCode = ExitCodes.UnknownLogin.exitCode, printHelp = false)
+            terminate(exitCode = ExitCodes.UNKNOWN_LOGIN.exitCode, printHelp = false)
         }
         val id: Int = response!!.getValue("id").toInt()
         val hashPassword: String = response.getValue("hashPassword")

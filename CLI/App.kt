@@ -36,12 +36,12 @@ class App {
         //функция для аутентификации
         fun authentificate(login: String, pass: String): Int {
             when {
-                isLoginValid(login) -> return InvalidLoginForm.exitCode
-                userDB.hasLogin(login) -> return UnknownLogin.exitCode
+                isLoginValid(login) -> return INVALID_LOGIN_FORM.exitCode
+                userDB.hasLogin(login) -> return UNKNOWN_LOGIN.exitCode
             }
             val passDB = userDB.findPasswordByLogin(login)
-            if (validatePassword(pass, passDB) == false) return InvalidPassword.exitCode
-            return Success.exitCode
+            if (validatePassword(pass, passDB) == false) return INVALID_PASSWORD.exitCode
+            return SUCCESS.exitCode
         }
 
         fun hasAuthentification(): Boolean {
@@ -53,14 +53,14 @@ class App {
 
 //        Проверка на пустоту и справку
         when {
-            arguments.hasHelp() -> return Help.exitCode
-            arguments.isEmpty() -> return Help.exitCode
+            arguments.hasHelp() -> return HELP.exitCode
+            arguments.isEmpty() -> return HELP.exitCode
 
         }
 
         if (hasAuthentification() == false) return (authentificate(arguments.login.toString(), (arguments.pass.toString())))
 
-        return Success.exitCode
+        return SUCCESS.exitCode
     }
 
 
