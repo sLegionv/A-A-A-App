@@ -16,5 +16,4 @@ data class Arguments(
     fun isEmpty() = (login == null && pass == null && role == null &&
             res == null && ds == null && de == null && vol == null)
 
-
 }
