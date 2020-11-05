@@ -1,7 +1,6 @@
 package services
 
 import data.Activity
-import data.ExitCodes
 import data.RoleResource
 import data.User
 import db.tableActivity
@@ -10,27 +9,24 @@ import db.tableUsers
 
 class DatabaseWrapper {
 
+    // Получение данных пользователя
     fun getUser(login: String): User {
-        val response = tableUsers.find { it["login"] == login }
-        if (response == null) {
-            terminate(exitCode = ExitCodes.UNKNOWN_LOGIN.exitCode, printHelp = false)
-        }
-        val id: Int = response!!.getValue("id").toInt()
-        val hashPassword: String = response.getValue("hashPassword")
-        val salt: String = response.getValue("salt")
-        return User(id, login, hashPassword, salt)
+        val response = tableUsers.find { it.login == login } ?: return User()
+        return User(response.id, login, response.hashPassword, response.salt)
     }
 
-    private fun checkAccess(roleResource: RoleResource): Boolean {
+    // Проверка доступа
+    fun checkAccess(roleResource: RoleResource): Boolean {
         val response = tableRolesResources.filter {
-            it["role"] == roleResource.role && it.getValue("idUser").toInt() == roleResource.idUser
-                    && checkResourceAccess(roleResource.resource, it.getValue("resource"))
+            it.role == roleResource.role && it.idUser == roleResource.idUser
+                    && checkResourceAccess(roleResource.resource, it.resource)
         }
         if (response.isEmpty())
             return false
         return true
     }
 
+    // Проверка доступа к ресурсу
     private fun checkResourceAccess(resource: String, realResource: String): Boolean {
         val realResourceLast = realResource.substringAfterLast('.')
         if (realResourceLast in resource.split("."))
@@ -38,7 +34,8 @@ class DatabaseWrapper {
         return false
     }
 
+    // Добавление активности
     fun addActivity(activity: Activity) {
-        tableActivity.add(activity.toMap())
+        tableActivity.add(activity)
     }
 }
