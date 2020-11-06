@@ -1,67 +1,31 @@
 import data.ExitCodes.*
-import db.UserDB
 import services.HandlerCLI
 import java.math.BigInteger
 import java.security.MessageDigest
 
 class App {
+    /* метод для проверки формата логина */
+    private fun isLoginValid(login: String): Boolean {
+        val mathResult = Regex("[^a-zA-Z0-9]").find(login)
+        if (mathResult != null) return true
+        return false
+
+    }
+
+
     fun run(args: Array<String>): Int {
 
         val handlerCLI = HandlerCLI()
         val arguments = handlerCLI.parse(args)
-        val userDB = UserDB()
 
-        //метод хеширования
-        fun md5(password: String): String {
-            val md = MessageDigest.getInstance("MD5")
-            return BigInteger(1, md.digest(password.toByteArray())).toString(16).padStart(32, '0')
-        }
-
-
-        //метод для проверки формата логина
-        fun isLoginValid(login: String): Boolean {
-            val mathResult = Regex("[^a-zA-Z0-9]").find(login)
-            if (mathResult != null) return true
-            return false
-
-        }
-
-        //метод для проверки пароля
-        fun validatePassword(passArg: String, passDB: String): Boolean {
-            if (md5(md5(passArg) + "SULT") != passDB) return false
-            return true
-        }
-
-
-        //функция для аутентификации
-        fun authentificate(login: String, pass: String): Int {
-            when {
-                isLoginValid(login) -> return INVALID_LOGIN_FORM.exitCode
-                userDB.hasLogin(login) -> return UNKNOWN_LOGIN.exitCode
-            }
-            val passDB = userDB.findPasswordByLogin(login)
-            if (validatePassword(pass, passDB) == false) return INVALID_PASSWORD.exitCode
-            return SUCCESS.exitCode
-        }
-
-        fun hasAuthentification(): Boolean {
-            val code = authentificate(arguments.login.toString(), (arguments.pass.toString()))
-            if (code == 2 || code == 3 || code == 4) return false
-            return true
-
-        }
-
-//        Проверка на пустоту и справку
+        /* Проверка на пустоту и справку */
         when {
             arguments.hasHelp() -> return HELP.exitCode
             arguments.isEmpty() -> return HELP.exitCode
 
         }
 
-        if (hasAuthentification() == false) return (authentificate(arguments.login.toString(), (arguments.pass.toString())))
 
         return SUCCESS.exitCode
     }
-
-
 }
