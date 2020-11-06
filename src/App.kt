@@ -11,6 +11,10 @@ class App {
         return false
 
     }
+    private fun md5(password: String): String {
+        val md = MessageDigest.getInstance("MD5")
+        return BigInteger(1, md.digest(password.toByteArray())).toString(16).padStart(32, '0')
+    }
 
 
     fun run(args: Array<String>): Int {
