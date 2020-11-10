@@ -11,7 +11,6 @@ data class Arguments(
         var de: String? = null,
         var vol: String? = null
 ) {
-    val app = App()
 
     // Проверка на команду справки
     fun hasHelp() = h
@@ -32,10 +31,4 @@ data class Arguments(
     // Проверка необходимости аккаунтинга
     fun isNeedAccounting() = ds != null && de != null && vol != null
 
-    fun hasAuthentification(): Boolean {
-        val code = app.authentificate(login.toString(), pass.toString())
-        if (code == 2 || code == 3 || code == 4) return false
-        return true
-
-    }
 }
