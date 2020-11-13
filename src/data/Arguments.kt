@@ -1,5 +1,4 @@
 package data
-import App
 
 data class Arguments(
         var h: Boolean = false,

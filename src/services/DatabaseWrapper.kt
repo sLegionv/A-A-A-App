@@ -10,10 +10,7 @@ import db.tableUsers
 class DatabaseWrapper {
 
     // Получение данных пользователя
-    fun getUser(login: String): User {
-        val response = tableUsers.find { it.login == login } ?: return User()
-        return User(response.id, login, response.hashPassword, response.salt)
-    }
+    fun getUser(login: String) = tableUsers.find { it.login == login }
 
     // Проверка доступа
     fun checkAccess(roleResource: RoleResource): Boolean {
